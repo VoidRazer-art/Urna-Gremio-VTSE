@@ -15,12 +15,6 @@ btnEntrar.addEventListener("click", () => {
     }
 });
 
-// Libera áudio após primeira interação
-document.addEventListener("click", () => {
-    document.getElementById("bip").play().catch(()=>{});
-    document.getElementById("confirm").play().catch(()=>{});
-}, { once: true });
-
 // ----------------------------
 // LÓGICA DA URNA
 // ----------------------------
@@ -105,3 +99,4 @@ function mostrarVotoRegistrado() {
         resetarParaTelaInicial(); 
     }, 2000);
 }
+
