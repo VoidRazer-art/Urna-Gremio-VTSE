@@ -1,0 +1,117 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: #fdeaae;
+    display: block; /* garante layout normal */
+}
+
+
+.teclado {
+    margin-top: 20px;
+}
+
+button {
+    width: 80px;
+    height: 60px;
+    margin: 5px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#confirmar {
+    width: 175px;
+    height: 60px;
+    background: green;
+    color: white;
+}
+
+.tela-senha {
+    width: 100%;
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 20px;
+    text-align: center;
+    background: #eee;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #0003;
+}
+
+.tela-senha input {
+    width: 80%;
+    padding: 10px;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+#btnEntrar {
+    padding: 12px 18px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#urna {
+    padding: 20px;
+    background: #e6e6e6;
+    border-radius: 10px;
+    box-shadow: 0 0 12px #0004;
+    width: 100%;
+    max-width: 400px;
+    margin: 40px auto;
+}
+
+
+#telaSenha {
+    width: 100%;
+    max-width: 400px;
+    margin: 80px auto;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#votoRegistrado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 0, 0.15); /* leve brilho verde */
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    border: black;
+}
+
+#votoRegistrado.ativo {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#votoRegistrado .box {
+    background: #0f0; /* verde neon */
+    color: black;
+    padding: 35px 45px;
+    border-radius: 14px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00;
+    animation: pulseNeon .6s ease;
+}
+
+@keyframes pulseNeon {
+    0% { transform: scale(0.3); opacity: 0; box-shadow: 0 0 0px #00ff00; }
+    60% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 30px #00ff00; }
+    100% { transform: scale(1); box-shadow: 0 0 20px #00ff00; }
+}
