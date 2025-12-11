@@ -1,15 +1,20 @@
 // === LOGIN SEGURO ===
 
+// === LOGIN SEGURO ===
+
 const telaSenha = document.getElementById("telaSenha");
 const urna = document.getElementById("urna");
 const btnEntrar = document.getElementById("btnEntrar");
 
 btnEntrar.addEventListener("click", async () => {
-    const digitada = document.getElementById("senhaDigitada").value;
+    let digitada = document.getElementById("senhaDigitada").value;
 
-    // VALIDAÇÃO VIA APPS SCRIPT
+    // força remoção de acentos caso usuário digite com acentos
+    digitada = digitada.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
     const r = await fetch(
-        "https://script.google.com/macros/s/AKfycbwNyJ92Unh-TFD3QYz1TbwK117e4mIU9qJqRoFqajADbI5cgQ0XDseDIJHW1_0tG4p2MQ/exec?senha=" + encodeURIComponent(digitada)
+        "https://script.google.com/macros/s/AKfycbwNyJ92Unh-TFD3QYz1TbwK117e4mIU9qJqRoFqajADbI5cgQ0XDseDIJHW1_0tG4p2MQ/exec?senha="
+        + encodeURIComponent(digitada)
     );
 
     const data = await r.json();
@@ -103,4 +108,5 @@ function mostrarVotoRegistrado() {
         resetarParaTelaInicial();
     }, 2000);
 }
+
 
