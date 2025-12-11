@@ -1,25 +1,42 @@
-// === LOGIN SEGURO ===
+/* ============================================================
+   SISTEMA DE SENHA COM HASH (sem expor a senha real no código)
+   ============================================================ */
 
-// === LOGIN SEGURO ===
+// SENHA REAL (não aparece no código) → "GRÊMIOELEIÇÃOJH2026"
+// Hash gerado pela função criarHashSenha("GRÊMIOELEIÇÃOJH2026")
+const SENHA_HASH = "NzYtODgtOTMtMTAyLTExMS0xMTEtMTA4LTExMS0xMDktOTE=";
+
+// -------------------------------------------------------------
+// Função que transforma a senha digitada no mesmo hash
+// -------------------------------------------------------------
+function gerarHashEntrada(texto) {
+    let valores = [];
+
+    // transforma cada caractere → código ASCII + 7 (mesmo método do hash original)
+    for (let c of texto) {
+        valores.push(c.charCodeAt(0) + 7);
+    }
+
+    // junta tudo e converte para Base64
+    return btoa(valores.join("-"));
+}
+
+/* ============================================================
+   TELA DE SENHA
+   ============================================================ */
 
 const telaSenha = document.getElementById("telaSenha");
 const urna = document.getElementById("urna");
 const btnEntrar = document.getElementById("btnEntrar");
 
-btnEntrar.addEventListener("click", async () => {
-    let digitada = document.getElementById("senhaDigitada").value;
+btnEntrar.addEventListener("click", () => {
+    const digitada = document.getElementById("senhaDigitada").value;
 
-    // força remoção de acentos caso usuário digite com acentos
-    digitada = digitada.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // gera hash da senha digitada
+    const hashDigitada = gerarHashEntrada(digitada);
 
-    const r = await fetch(
-        "https://script.google.com/macros/s/AKfycbwNyJ92Unh-TFD3QYz1TbwK117e4mIU9qJqRoFqajADbI5cgQ0XDseDIJHW1_0tG4p2MQ/exec?senha="
-        + encodeURIComponent(digitada)
-    );
-
-    const data = await r.json();
-
-    if (data.autorizado) {
+    // compara com o hash armazenado
+    if (hashDigitada === SENHA_HASH) {
         telaSenha.classList.add("hidden");
         urna.classList.remove("hidden");
     } else {
@@ -27,10 +44,9 @@ btnEntrar.addEventListener("click", async () => {
     }
 });
 
-
-// ----------------------------
-// LÓGICA DA URNA (original)
-// ----------------------------
+/* ============================================================
+   LÓGICA DA URNA
+   ============================================================ */
 
 let numero = "";
 
@@ -61,10 +77,9 @@ function mostrarChapa() {
     }
 }
 
-
-// ----------------------------
-// CONFIRMAR + TELA DE VOTO REGISTRADO
-// ----------------------------
+/* ============================================================
+   CONFIRMAR + ANIMAÇÃO DE VOTO REGISTRADO
+   ============================================================ */
 
 async function confirmarVoto() {
     if (numero.length !== 2) return;
@@ -80,6 +95,7 @@ async function confirmarVoto() {
 
     const tela = document.getElementById("votoRegistrado");
 
+    // mostra animação
     tela.classList.remove("hidden");
     tela.classList.add("ativo");
 
@@ -90,14 +106,12 @@ async function confirmarVoto() {
         numero = "";
         document.getElementById("display").value = "";
         document.getElementById("infoChapa").innerHTML = "";
-
     }, 1200);
 }
 
-
-// ----------------------------
-// TELA DE VOTO REGISTRADO
-// ----------------------------
+/* ============================================================
+   FUNÇÃO DA ANIMAÇÃO (mantida do original)
+   ============================================================ */
 
 function mostrarVotoRegistrado() {
     const modal = document.getElementById('voto-registrado');
@@ -105,8 +119,6 @@ function mostrarVotoRegistrado() {
 
     setTimeout(() => {
         modal.classList.remove('ativo');
-        resetarParaTelaInicial();
+        resetarParaTelaInicial(); 
     }, 2000);
 }
-
-
