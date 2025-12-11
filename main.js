@@ -1,13 +1,20 @@
-const SENHA = "GRÊMIOELEIÇÃOJH2026";
+// === LOGIN SEGURO ===
 
 const telaSenha = document.getElementById("telaSenha");
 const urna = document.getElementById("urna");
 const btnEntrar = document.getElementById("btnEntrar");
 
-btnEntrar.addEventListener("click", () => {
+btnEntrar.addEventListener("click", async () => {
     const digitada = document.getElementById("senhaDigitada").value;
 
-    if (digitada === SENHA) {
+    // VALIDAÇÃO VIA APPS SCRIPT
+    const r = await fetch(
+        "https://script.google.com/macros/s/AKfycbwNyJ92Unh-TFD3QYz1TbwK117e4mIU9qJqRoFqajADbI5cgQ0XDseDIJHW1_0tG4p2MQ/exec?senha=" + encodeURIComponent(digitada)
+    );
+
+    const data = await r.json();
+
+    if (data.autorizado) {
         telaSenha.classList.add("hidden");
         urna.classList.remove("hidden");
     } else {
@@ -15,8 +22,9 @@ btnEntrar.addEventListener("click", () => {
     }
 });
 
+
 // ----------------------------
-// LÓGICA DA URNA
+// LÓGICA DA URNA (original)
 // ----------------------------
 
 let numero = "";
@@ -48,6 +56,7 @@ function mostrarChapa() {
     }
 }
 
+
 // ----------------------------
 // CONFIRMAR + TELA DE VOTO REGISTRADO
 // ----------------------------
@@ -66,24 +75,19 @@ async function confirmarVoto() {
 
     const tela = document.getElementById("votoRegistrado");
 
-    // mostra
     tela.classList.remove("hidden");
     tela.classList.add("ativo");
 
     setTimeout(() => {
-
-        // esconde
         tela.classList.remove("ativo");
         setTimeout(() => tela.classList.add("hidden"), 300);
 
-        // limpa urna
         numero = "";
         document.getElementById("display").value = "";
         document.getElementById("infoChapa").innerHTML = "";
 
     }, 1200);
 }
-
 
 
 // ----------------------------
@@ -96,7 +100,7 @@ function mostrarVotoRegistrado() {
 
     setTimeout(() => {
         modal.classList.remove('ativo');
-        resetarParaTelaInicial(); 
+        resetarParaTelaInicial();
     }, 2000);
 }
 
