@@ -1,42 +1,26 @@
-/* ============================================================
-   SISTEMA DE SENHA COM HASH (sem expor a senha real no código)
-   ============================================================ */
+const SENHA_HASH = "VrVaUGVJSsygn1Fr5na+bTov+g13gu0uL1SqGa91n/o=";
 
-// SENHA REAL (não aparece no código) → "GRÊMIOELEIÇÃOJH2026"
-// Hash gerado pela função criarHashSenha("GRÊMIOELEIÇÃOJH2026")
-const SENHA_HASH = "NzYtODgtOTMtMTAyLTExMS0xMTEtMTA4LTExMS0xMDktOTE=";
+async function hashSenha(texto) {
+    // Normaliza acentos para garantir compatibilidade
+    const normalizado = texto.normalize("NFC");
 
-// -------------------------------------------------------------
-// Função que transforma a senha digitada no mesmo hash
-// -------------------------------------------------------------
-function gerarHashEntrada(texto) {
-    let valores = [];
+    const encoder = new TextEncoder();
+    const data = encoder.encode(normalizado);
+    const digest = await crypto.subtle.digest("SHA-256", data);
 
-    // transforma cada caractere → código ASCII + 7 (mesmo método do hash original)
-    for (let c of texto) {
-        valores.push(c.charCodeAt(0) + 7);
-    }
-
-    // junta tudo e converte para Base64
-    return btoa(valores.join("-"));
+    return btoa(String.fromCharCode(...new Uint8Array(digest)));
 }
-
-/* ============================================================
-   TELA DE SENHA
-   ============================================================ */
 
 const telaSenha = document.getElementById("telaSenha");
 const urna = document.getElementById("urna");
 const btnEntrar = document.getElementById("btnEntrar");
 
-btnEntrar.addEventListener("click", () => {
+btnEntrar.addEventListener("click", async () => {
     const digitada = document.getElementById("senhaDigitada").value;
 
-    // gera hash da senha digitada
-    const hashDigitada = gerarHashEntrada(digitada);
+    const hash = await hashSenha(digitada);
 
-    // compara com o hash armazenado
-    if (hashDigitada === SENHA_HASH) {
+    if (hash === SENHA_HASH) {
         telaSenha.classList.add("hidden");
         urna.classList.remove("hidden");
     } else {
@@ -122,3 +106,4 @@ function mostrarVotoRegistrado() {
         resetarParaTelaInicial(); 
     }, 2000);
 }
+
